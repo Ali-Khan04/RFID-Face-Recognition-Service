@@ -6,5 +6,6 @@ __pycache__/
 .env.*
 !.env.example
 student_photos/
+node_modules/
 
 *.onnx
