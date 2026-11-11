@@ -1,0 +1,30 @@
+services:
+  face-service:
+    build:
+      context: .
+      dockerfile: backend/python-service/Dockerfile
+    environment:
+      FACE_SERVICE_TOKEN: ${FACE_SERVICE_TOKEN}
+    volumes:
+      - insightface-cache:/root/.insightface
+    restart: unless-stopped
+
+  node-server:
+    build:
+      context: .
+      dockerfile: backend/node-server/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      FACE_SERVICE_URL: http://face-service:8001
+      FACE_SERVICE_TOKEN: ${FACE_SERVICE_TOKEN}
+      FACE_MATCH_THRESHOLD: ${FACE_MATCH_THRESHOLD:-0.4}
+    depends_on:
+      - face-service
+    restart: unless-stopped
+
+volumes:
+  insightface-cache:

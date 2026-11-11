@@ -7,5 +7,4 @@ __pycache__/
 !.env.example
 student_photos/
 node_modules/
-
 *.onnx

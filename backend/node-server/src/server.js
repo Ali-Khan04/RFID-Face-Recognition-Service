@@ -91,6 +91,7 @@ app.post("/api/students/lookup", async (req, res) => {
 });
 
 //api/verify endpoint for face verification
+
 app.post("/api/verify", upload.single("image"), async (req, res) => {
   const { rfid_uid_hex } = req.body;
 
@@ -165,12 +166,15 @@ app.post("/api/verify", upload.single("image"), async (req, res) => {
       new Blob([req.file.buffer], { type: "image/jpeg" }),
       "capture.jpg",
     );
-    //pgvector may return the embedding as a string
-    typeof student.face_embedding === "string"
-      ? student.face_embedding
-      : JSON.stringify(student.face_embedding);
+
+    // Convert the embedding to a JSON string
+    const referenceEmbedding =
+      typeof student.face_embedding === "string"
+        ? student.face_embedding
+        : JSON.stringify(student.face_embedding);
 
     formData.append("reference_embedding", referenceEmbedding);
+
     const faceResponse = await fetch(`${FACE_SERVICE_URL}/verify-face`, {
       method: "POST",
       headers: {

@@ -1,0 +1,13 @@
+
+.venv
+**/.venv
+node_modules
+**/node_modules
+student_photos
+.env
+.env.*
+!.env.example
+.git
+__pycache__
+**/__pycache__
+*.py[cod]
